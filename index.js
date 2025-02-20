@@ -74,6 +74,7 @@ let displayweather = function(data){
         humidity.innerText = `Humidity: ${data.currentConditions.humidity}%`;
         let address = document.createElement("div");    
         address.innerText = `Address: ${data.resolvedAddress}`;
+address.classList.add("address")
         weatherdiv.appendChild(description);
         weatherdiv.appendChild(windSpeed);
         weatherdiv.appendChild(humidity);
