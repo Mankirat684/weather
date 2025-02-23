@@ -4,19 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>weather</title>
+    <link rel="stylesheet" href="index.css">
+
 </head>
 <body>
     <div class="container">
         <div class="searchdiv">
             <input type="text" class="search" placeholder="Search for a city">
-            <button class="searchbtn">Search</button>
+            <button class="searchbtn"><img src="search.svg" alt="search" class="searchlogo"></button>
         </div>
-        <div class="weather"></div>
+        <div class="weather">
+            <div class="city"></div>
+            <div class="temp"></div>
+            <div class="weatherdesc"></div>
+            <div class="humidity"></div>
+            <div class="windspeed"></div>
+        </div>
         <div class="tempunits">
-            <button class="changeunit">Change to °C</button>
+            <button class="changeunit"></button>
         </div>
-        <div class="showgif"></div>
+        <!-- <div class="showgif"></div> -->
     </div>
- <script src="index.js"></script> 
+    <script src="index.js"></script>
 </body>
 </html>
