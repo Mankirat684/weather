@@ -29,69 +29,102 @@ searchbtn.addEventListener("click", function () {
   weather.then((data)=>{displayweather(data);
     console.log(data);
     return data.currentConditions.icon;
-  })
-  .then((searchquery)=>{
-    let gifpromise = fetchgif(searchquery);
-    gifpromise.then((data)=>{
-        console.log(data);
-        let img = document.createElement("img");
-        img.src = data.data[0].images.original.url;
-        showgif.innerHTML = "";
-        showgif.appendChild(img);
-    })
   })  
+  .catch(function (error) {
+    let weatherdiv = document.querySelector(".weather");
+    weatherdiv.innerHTML = "";
+    let err = document.createElement("div");
+    err.innerText = "City not found"; 
+    err.classList.add("error");
+    weatherdiv.appendChild(err);
+  })
   document.querySelector(".search").value = "";
 
  
+});
+let input = document.querySelector(".search");
+input.addEventListener("keypress", function (event) {
+  let search =  input.value;
+  if (event.key == "Enter" &&search) {
+    weather = fetchData(search);
+    weather.then((data)=>{displayweather(data);
+      console.log(data);
+      return data.currentConditions.icon;
+    })  
+    .catch(function (error) {
+      let weatherdiv = document.querySelector(".weather");
+      weatherdiv.innerHTML = "";
+      let err = document.createElement("div");
+      err.innerText = "City not found"; 
+      err.classList.add("error");
+      weatherdiv.appendChild(err);
+    })
+    document.querySelector(".search").value = "";
+  }
 });
 let isCelsius = false;
 let toggleUnit = document.querySelector(".changeunit");
 
 toggleUnit.addEventListener("click",()=>{
-    if(isCelsius){
-        toggleUnit.innerText = "Change to °C";
-        isCelsius = false;
-        weather.then((data)=>{displayweather(data);});
-    }else{
-        toggleUnit.innerText = "Change to °F";
-        isCelsius = true;
-        weather.then((data)=>{displayweather(data);});
-    }
+    unitbtntoggle()
+    weather.then((data)=>{displayweather(data);});
 })
+
+function unitbtntoggle(){
+    if(isCelsius){
+        toggleUnit.innerText = "°C";
+        isCelsius = false;
+    }else{
+        toggleUnit.innerText = "°F";
+        isCelsius = true;
+    }
+}
+unitbtntoggle();
+
+
 let displayweather = function(data){
     let weatherdiv = document.querySelector(".weather");
     weatherdiv.innerHTML = "";
     if(isCelsius){
-        let temp = Math.round((Number(data.currentConditions.temp) - 32) * 5/9)+""+ "°C";
+        let temp = Math.round((Number(data.currentConditions.temp) - 32) * 5/9);
         let currenttemp = document.createElement("div");
-        currenttemp.innerText = `Current Temperature: ${(temp)}`;
+        currenttemp.innerHTML = ` ${temp}°<span>C</span>`;
         weatherdiv.appendChild(currenttemp);
         let description = document.createElement("div");
-        description.innerText = `Description: ${data.currentConditions.conditions}`;
+        description.innerText = `${data.currentConditions.conditions}`;
         let windSpeed = document.createElement("div");
-        windSpeed.innerText = `Wind Speed: ${data.currentConditions.windspeed} km/h`;
+        windSpeed.innerText = `Wind: ${data.currentConditions.windspeed} km/h`;
         let humidity = document.createElement("div");
         humidity.innerText = `Humidity: ${data.currentConditions.humidity}%`;
         let address = document.createElement("div");    
-        address.innerText = `Address: ${data.resolvedAddress}`;
-address.classList.add("address")
+        address.innerText = ` ${data.resolvedAddress}`;
+        address.classList.add("address");
+        humidity.classList.add("humidity");
+        windSpeed.classList.add("windspeed");
+        description.classList.add("description");
+        currenttemp.classList.add("currenttemp");
         weatherdiv.appendChild(description);
         weatherdiv.appendChild(windSpeed);
         weatherdiv.appendChild(humidity);
         weatherdiv.appendChild(address);
     }else{
         let currenttemp = document.createElement("div");
-        let temp = data.currentConditions.temp +""+ "°F";
-        currenttemp.innerText = `Current Temperature: ${temp}`;
+        let temp = Math.floor(data.currentConditions.temp);
+        currenttemp.innerHTML = ` ${temp}°<span>F</span>`;
         weatherdiv.appendChild(currenttemp);
         let description = document.createElement("div");
-        description.innerText = `Description: ${data.currentConditions.conditions}`;
+        description.innerText = ` ${data.currentConditions.conditions}`;
         let windSpeed = document.createElement("div");
-        windSpeed.innerText = `Wind Speed: ${data.currentConditions.windspeed} km/h`;
+        windSpeed.innerText = `Wind: ${data.currentConditions.windspeed} km/h`;
         let humidity = document.createElement("div");
         humidity.innerText = `Humidity: ${data.currentConditions.humidity}%`;
         let address = document.createElement("div");    
-        address.innerText = `Address: ${data.resolvedAddress}`;
+        address.innerText = ` ${data.resolvedAddress}`;
+        address.classList.add("address");
+        humidity.classList.add("humidity");
+        windSpeed.classList.add("windspeed");
+        description.classList.add("description");
+        currenttemp.classList.add("currenttemp");
         weatherdiv.appendChild(description);
         weatherdiv.appendChild(windSpeed);
         weatherdiv.appendChild(humidity);
@@ -99,3 +132,15 @@ address.classList.add("address")
     }
 }
 
+function defaultWeather() {
+  let search =  "delhi"
+  weather = fetchData(search);
+  weather.then((data)=>{displayweather(data);
+    console.log(data);
+    return data.currentConditions.icon;
+  })
+  document.querySelector(".search").value = "";
+
+ 
+};
+defaultWeather()
