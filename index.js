@@ -92,10 +92,20 @@ let isCelsius = false;
 let toggleUnit = document.querySelector(".changeunit");
 
 toggleUnit.addEventListener("click", () => {
+  let weatherdiv = document.querySelector(".weather");
+  weatherdiv.innerHTML = "";
   unitbtntoggle();
   weather.then((data) => {
     displayweather(data);
   });
+  aqiJson
+    .then((data) => {
+      displayAqi(data);
+      console.log(data);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
 });
 
 function unitbtntoggle() {
